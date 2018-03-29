@@ -9,12 +9,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -130,7 +127,7 @@ public class CSVReader implements Closeable {
     }
 
     public String[] getHeader() {
-        return this.header.clone();
+        return this.header == null ? null : this.header.clone();
     }
     
     public Map<String, String> readRow() throws IOException {
