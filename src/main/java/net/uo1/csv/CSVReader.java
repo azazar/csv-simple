@@ -36,7 +36,7 @@ public class CSVReader implements Closeable {
     }
 
     public CSVReader(Reader reader) {
-        this(reader, ',', '"', '\\');
+        this(reader, CSV.DEFAULT_DELIMITER, CSV.DEFAULT_ENCLOSURE, CSV.DEFAULT_ESCAPE);
     }
     
     private int expectedLength = 0;
