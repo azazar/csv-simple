@@ -128,6 +128,10 @@ public class CSVReader implements Closeable {
         
         this.header = header;
     }
+
+    public String[] getHeader() {
+        return this.header.clone();
+    }
     
     public Map<String, String> readRow() throws IOException {
         if (header == null) {
