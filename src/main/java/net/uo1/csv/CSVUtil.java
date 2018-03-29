@@ -9,19 +9,19 @@ package net.uo1.csv;
  */
 public class CSVUtil {
     
-    public String toCSV(String[] values) {
+    public static String toCSV(String[] values) {
         return toCSV(values, CSV.DEFAULT_DELIMITER, CSV.DEFAULT_ENCLOSURE, CSV.DEFAULT_ESCAPE);
     }
 
-    public String toCSV(String[] values, char delimiter) {
+    public static String toCSV(String[] values, char delimiter) {
         return toCSV(values, delimiter, CSV.DEFAULT_ENCLOSURE, CSV.DEFAULT_ESCAPE);
     }
 
-    public String toCSV(String[] values, char delimiter, char enclosure) {
+    public static String toCSV(String[] values, char delimiter, char enclosure) {
         return toCSV(values, delimiter, enclosure, CSV.DEFAULT_ESCAPE);
     }
     
-    public boolean shouldEnclose(String value, char delimiter, char enclosure, char escape) {
+    public static boolean shouldEnclose(String value, char delimiter, char enclosure, char escape) {
         if (value.isEmpty())
             return false;
         
@@ -42,7 +42,7 @@ public class CSVUtil {
         return false;
     }
 
-    public String toCSV(String[] values, char delimiter, char enclosure, char escape) {
+    public static String toCSV(String[] values, char delimiter, char enclosure, char escape) {
         int expectedLength = 0;
         for (String value : values) {
             expectedLength += value.length() + 1;
