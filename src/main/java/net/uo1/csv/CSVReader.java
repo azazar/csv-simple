@@ -19,7 +19,7 @@ import java.util.stream.StreamSupport;
  *
  * @author mih
  */
-public class CSVReader implements Closeable {
+public class CSVReader implements Closeable, Iterable<Map<String, String>> {
     
     private Reader reader;
     
@@ -226,6 +226,39 @@ public class CSVReader implements Closeable {
 
     public Stream<Map<String, String>> rowStream(boolean parallel) {
         return StreamSupport.stream(new NullTerminatedSpliterator<>(this::readRowNoIOException), parallel);
+    }
+
+    @Override
+    public Iterator<Map<String, String>> iterator() {
+        return new Iterator<Map<String, String>>() {
+            
+            private Map<String, String> read() {
+                try {
+                    return readRow();
+                }
+                catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            
+            private Map<String, String> next = read();
+
+            @Override
+            public boolean hasNext() {
+                return next != null;
+            }
+
+            @Override
+            public Map<String, String> next() {
+                if (next == null) {
+                    throw new IllegalStateException();
+                }
+                Map<String, String> current = next;
+                next = read();
+                return current;
+            }
+
+        };
     }
 
 }
