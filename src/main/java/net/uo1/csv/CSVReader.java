@@ -71,12 +71,22 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
                 return null;
             }
             
-            if (enclosed) {
+            if (prev == escape) {
+                cell.append((char)ch);
+            }
+            else if (enclosed) {
                 if (ch == enclosure) {
-                    if (prev == enclosure) {
-                        cell.append(enclosure);
+                    if (prev == escape) {
+                        cell.append((char)ch);
                     }
-                    enclosed = false;
+                    else {
+                        if (prev == enclosure) {
+                            cell.append(enclosure);
+                        }
+                        enclosed = false;
+                    }
+                }
+                else if (ch == escape) {
                 }
                 else {
                     cell.append((char)ch);
@@ -88,11 +98,14 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
                 }
                 else if (ch == delimiter || ch == newLine) {
                     line.add(cell.toString());
-                    cell.setLength(0);
 
                     if (ch == newLine) {
                         return line.build();
                     }
+
+                    cell.setLength(0);
+                }
+                else if (ch == escape) {
                 }
                 else {
                     cell.append((char)ch);
