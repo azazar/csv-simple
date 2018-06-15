@@ -27,6 +27,8 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
     private char enclosure;
     private char escape;
     private char newLine = '\n';
+    
+    private boolean stripCrBeforeLf = false;
 
     public CSVReader(Reader reader, char delimiter, char enclosure, char escape) {
         this.reader = reader;
@@ -37,6 +39,14 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
 
     public CSVReader(Reader reader) {
         this(reader, CSV.DEFAULT_DELIMITER, CSV.DEFAULT_ENCLOSURE, CSV.DEFAULT_ESCAPE);
+    }
+
+    public boolean isStripCrBeforeLf() {
+        return stripCrBeforeLf;
+    }
+
+    public void setStripCrBeforeLf(boolean stripCrBeforeLf) {
+        this.stripCrBeforeLf = stripCrBeforeLf;
     }
     
     private int expectedLength = 0;
@@ -97,6 +107,10 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
                     enclosed = true;
                 }
                 else if (ch == delimiter || ch == newLine) {
+                    if (ch == newLine && cell.length() > 0 && stripCrBeforeLf && cell.charAt(cell.length() - 1) == '\r') {
+                        cell.setLength(cell.length() - 1);
+                    }
+
                     line.add(cell.toString());
 
                     if (ch == newLine) {
