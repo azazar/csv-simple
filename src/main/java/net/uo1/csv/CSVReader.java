@@ -104,6 +104,9 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
             }
             else {
                 if (ch == enclosure) {
+                    if (prev == enclosure) {
+                        cell.append(enclosure);
+                    }
                     enclosed = true;
                 }
                 else if (ch == delimiter || ch == newLine) {
