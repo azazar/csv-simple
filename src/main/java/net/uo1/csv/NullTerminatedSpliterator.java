@@ -12,7 +12,7 @@ import java.util.stream.StreamSupport;
  *
  * @author Mikhail Yevchenko <123@ǟẓåẓạŗ.ćọ₥>
  */
-public class NullTerminatedSpliterator<T> implements Spliterator<T> {
+class NullTerminatedSpliterator<T> implements Spliterator<T> {
     
     public Supplier<T> supplier;
 

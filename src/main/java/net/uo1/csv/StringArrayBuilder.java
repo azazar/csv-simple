@@ -5,9 +5,9 @@ package net.uo1.csv;
 
 /**
  *
- * @author mih
+ * @author Mikhail Yevchenko
  */
-public class StringArrayBuilder {
+class StringArrayBuilder {
     
     private static final String[] EMPTY = new String[0];
 

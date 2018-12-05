@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
 
 /**
  *
- * @author mih
+ * @author Mikhail Yevchenko
  */
 public class CSVReader implements Closeable, Iterable<Map<String, String>> {
     
@@ -28,8 +28,16 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
     private char escape;
     private char newLine = '\n';
     
-    private boolean stripCrBeforeLf = false;
+    private boolean stripCrBeforeLf = true;
 
+    /**
+     * Creates new CSVReader
+     *
+     * @param reader
+     * @param delimiter Field delimiter character. Zero value disables it.
+     * @param enclosure Field enclosure character. Zero value disables it.
+     * @param escape Escape character. Zero value disables it.
+     */
     public CSVReader(Reader reader, char delimiter, char enclosure, char escape) {
         this.reader = reader;
         this.delimiter = delimiter;
@@ -37,14 +45,28 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
         this.escape = escape;
     }
 
+    /**
+     * Creates new CSVReader with rfc4180 settings
+     *
+     * @param reader
+     */
     public CSVReader(Reader reader) {
-        this(reader, CSV.DEFAULT_DELIMITER, CSV.DEFAULT_ENCLOSURE, CSV.DEFAULT_ESCAPE);
+        this(reader, CSV.RFC4180_DELIMITER, CSV.RFC4180_ENCLOSURE, CSV.RFC4180_ESCAPE);
     }
 
+    /**
+     *
+     * @return support flag for CRLF line endings
+     */
     public boolean isStripCrBeforeLf() {
         return stripCrBeforeLf;
     }
 
+    /**
+     * Set support flag for CRLF line endings (enabled to default)
+     *
+     * @param stripCrBeforeLf
+     */
     public void setStripCrBeforeLf(boolean stripCrBeforeLf) {
         this.stripCrBeforeLf = stripCrBeforeLf;
     }
@@ -52,7 +74,13 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
     private int expectedLength = 0;
     
     private boolean eof = false;
-    
+
+    /**
+     * Reads single line from CSV file as string array
+     *
+     * @return decoded csv string values
+     * @throws IOException
+     */
     public String[] readLine() throws IOException {
         if (eof) {
             return null;
@@ -60,12 +88,11 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
         
         StringArrayBuilder line = new StringArrayBuilder(expectedLength);
         
-        int ch = -1, prev;
+        int ch;
         StringBuilder cell = new StringBuilder();
         boolean enclosed = false;
         
         for(;;) {
-            prev = ch;
             ch = reader.read();
             
             if (ch == -1) {
@@ -81,22 +108,35 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
                 return null;
             }
             
-            if (prev == escape) {
-                cell.append((char)ch);
+            if (ch == escape) {
+                ch = reader.read();
+                if (ch != -1) {
+                    cell.append((char)ch);
+                }
             }
             else if (enclosed) {
                 if (ch == enclosure) {
-                    if (prev == escape) {
-                        cell.append((char)ch);
+                    ch = reader.read();
+
+                    if (ch == -1) {
+                        // eof
                     }
-                    else {
-                        if (prev == enclosure) {
-                            cell.append(enclosure);
-                        }
+                    else if (ch == enclosure) {
+                        cell.append(enclosure);
+                    }
+                    else if (ch == delimiter || ch == newLine) {
+                        line.add(cell.toString());
+
+                        if (ch == newLine)
+                            return line.build();
+
+                        cell.setLength(0);
+
                         enclosed = false;
                     }
-                }
-                else if (ch == escape) {
+                    else {
+                        enclosed = false;
+                    }
                 }
                 else {
                     cell.append((char)ch);
@@ -104,9 +144,6 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
             }
             else {
                 if (ch == enclosure) {
-                    if (prev == enclosure) {
-                        cell.append(enclosure);
-                    }
                     enclosed = true;
                 }
                 else if (ch == delimiter || ch == newLine) {
@@ -131,7 +168,12 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
             
         }
     }
-    
+
+    /**
+     * Wraps internal reader with BufferedReader if it's not done already
+     *
+     * @see BufferedReader
+     */
     public void ensureBuffered() {
         if (!(reader instanceof BufferedReader)) {
             reader = new BufferedReader(reader);
@@ -139,7 +181,12 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
     }
     
     private String[] header = null;
-    
+
+    /**
+     * Reads CSV header line. readRow(...) does this automatically.
+     *
+     * @throws IOException
+     */
     public void readHeader() throws IOException {
         if (header != null) {
             throw new IllegalStateException();
@@ -147,7 +194,13 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
         
         header = readLine();
     }
-    
+
+    /**
+     * Sets field names for readRow(...)
+     *
+     * @param header field names to be used as keys in readRow(...)
+     * @throws IOException
+     */
     public void applyHeader(String[] header) {
         if (this.header != null) {
             throw new IllegalStateException();
@@ -156,10 +209,21 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
         this.header = header;
     }
 
+    /**
+     *
+     * @return current field names
+     */
     public String[] getHeader() {
         return this.header == null ? null : this.header.clone();
     }
-    
+
+    /**
+     * Reads single line from CSV file as map with keys specified in file
+     * header or using applyHeader(...)
+     *
+     * @return decoded csv string values
+     * @throws IOException
+     */
     public Map<String, String> readRow() throws IOException {
         if (header == null) {
             readHeader();
@@ -226,7 +290,12 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
         
         };
     }
-    
+
+    /**
+     * Closes underlying reader
+     *
+     * @throws IOException
+     */
     @Override
     public void close() throws IOException {
         reader.close();

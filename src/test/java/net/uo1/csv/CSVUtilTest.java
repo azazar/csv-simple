@@ -3,9 +3,6 @@
  */
 package net.uo1.csv;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
-
 /**
  *
  * @author Mikhail Yevchenko <spam@uo1.net>
@@ -13,7 +10,7 @@ import static org.junit.Assert.*;
 public class CSVUtilTest {
 
     public static void main(String[] args) {
-        System.out.println(CSVUtil.toCSV(new String[] { "asd", "aa,sd", "as\"d" }));;
+        System.out.println(CSV.toCSV(new String[] { "asd", "aa,sd", "as\"d" }));;
     }
     
     
