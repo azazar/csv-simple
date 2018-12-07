@@ -50,7 +50,7 @@ public class CSVReaderTest {
 
         Random rand = new Random(0);
 
-        char[] testChars = new char[] { CSV.RFC4180_DELIMITER, CSV.RFC4180_ENCLOSURE, 'a', 'b', 'c', 'd', 'e', 'f' };
+        char[] testChars = new char[] { CSV.DEFAULT.delimiter, CSV.DEFAULT.delimiter, 'a', 'b', 'c', 'd', 'e', 'f' };
 
         StringBuilder csv = new StringBuilder();
 
