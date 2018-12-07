@@ -4,22 +4,22 @@ csv-simple is a simple CSV reader/writer for Java without any dependencies.
 
 ## Usage
 
-### Install csv-simple to local repository
+### Add maven repository
 
-    $ git clone https://github.com/azazar/csv-simple
-    $ cd csv-simple
-    $ mvn install
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
     
-### Add maven dependency
+### And dependency
 
-    <dependencies>
-        <dependency>
-            <groupId>net.uo1</groupId>
-            <artifactId>csv-simple</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-    </dependencies>
-
+	<dependency>
+	    <groupId>com.github.azazar</groupId>
+	    <artifactId>csv-simple</artifactId>
+	    <version>1.1.2</version>
+	</dependency>
 
 ## Usage Examples
 
