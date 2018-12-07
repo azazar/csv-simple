@@ -46,6 +46,32 @@ public class CSVWriter implements Closeable {
     }
 
     /**
+     * Writes single row to CSV file
+     *
+     * @param values row cells
+     * @throws IOException
+     */
+    public void write(String... values) throws IOException {
+        writer.write(settings.encode(values));
+    }
+
+    /**
+     * Writes single row to CSV file
+     *
+     * @param values row cells (converted to strings with String.valueOf())
+     * @throws IOException
+     */
+    public void write(Object... values) throws IOException {
+        String[] stringValues = new String[values.length];
+
+        for (int i = 0; i < values.length; i++) {
+            stringValues[i] = String.valueOf(values[i]);
+        }
+
+        write(stringValues);
+    }
+
+    /**
      * Closes underlying writer
      *
      * @throws IOException
