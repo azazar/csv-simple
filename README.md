@@ -7,10 +7,10 @@ csv-simple is a simple CSV reader/writer for Java without any dependencies.
 ### Add maven repository
 
 	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
+	    <repository>
+	        <id>jitpack.io</id>
+	        <url>https://jitpack.io</url>
+	    </repository>
 	</repositories>
     
 ### And dependency
