@@ -148,16 +148,16 @@ public class CSV {
         if (value.isEmpty())
             return false;
 
-        char char_ = value.charAt(0);
+        char ch = value.charAt(0);
 
-        if (char_ == settings.delimiter || char_ == settings.enclosure) {
+        if (ch == settings.delimiter || ch == settings.enclosure) {
             return true;
         }
 
         for (int ofs = 1; ofs < value.length(); ofs++) {
-            char_ = value.charAt(ofs);
+            ch = value.charAt(ofs);
 
-            if (char_ == settings.delimiter || char_ == settings.enclosure) {
+            if (ch == settings.delimiter || ch == settings.enclosure) {
                 return true;
             }
         }
@@ -254,16 +254,8 @@ public class CSV {
             return false;
         }
         final CSV other = (CSV) obj;
-        if (this.delimiter != other.delimiter) {
-            return false;
-        }
-        if (this.enclosure != other.enclosure) {
-            return false;
-        }
-        if (this.escape != other.escape) {
-            return false;
-        }
-        return true;
+
+        return this.delimiter == other.delimiter && this.enclosure == other.enclosure && this.escape == other.escape;
     }
 
 
