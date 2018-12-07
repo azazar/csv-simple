@@ -1,29 +1,53 @@
+/*
+ * Copyright (c) 2018 Mikhail Yevchenko
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or
+ * sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package net.uo1.csv;
 
 import java.io.Reader;
+import java.io.Writer;
 
 /**
  * @author Mikhail Yevchenko <spam@uo1.net>
  */
 public class CSV {
 
-    public static final char RFC4180_DELIMITER = ',';
-    public static final char RFC4180_ENCLOSURE = '"';
-    public static final char RFC4180_ESCAPE = (char)0;
-
-    public static final char DEFAULT_PHP_ESCAPE = '\\';
-
     /**
      *
      * RFC4180-compatible settings
      */
-    public static final CSV RFC4180 = new CSV(RFC4180_DELIMITER, RFC4180_ENCLOSURE, RFC4180_ESCAPE);
+    public static final CSV RFC4180 = new CSV(',', '"', (char)0);
 
     /**
      *
      * PHP-compatible settings
      */
-    public static final CSV PHP = new CSV(RFC4180_DELIMITER, RFC4180_ENCLOSURE, DEFAULT_PHP_ESCAPE);
+    public static final CSV PHP = new CSV(',', '"', '\\');
+
+    /**
+     *
+     * RFC4180-compatible default settings
+     */
+    public static final CSV DEFAULT = RFC4180;
 
     /**
      *
@@ -89,13 +113,13 @@ public class CSV {
     }
 
     /**
-     * Creates new CSVReader with rfc4180 settings
+     * Creates new CSVWriter
      *
-     * @param reader that reads raw CSV input
-     * @return new CSVReader instance
+     * @param writer
+     * @return new CSVWriter instance
      */
-    public static CSVReader open(Reader reader) {
-        return RFC4180.createReader(reader);
+    public CSVWriter createWriter(Writer writer) {
+        return new CSVWriter(writer, this);
     }
 
     /**
@@ -105,7 +129,7 @@ public class CSV {
      * @return CSV encoded line
      */
     public static String toCSV(String[] values) {
-        return toCSV(values, RFC4180_DELIMITER, RFC4180_ENCLOSURE, RFC4180_ESCAPE);
+        return toCSV(values, DEFAULT.delimiter, DEFAULT.enclosure, DEFAULT.escape);
     }
 
     /**
@@ -117,7 +141,7 @@ public class CSV {
      * @return CSV encoded line
      */
     public static String toCSV(String[] values, char delimiter, char enclosure) {
-        return toCSV(values, delimiter, enclosure, RFC4180_ESCAPE);
+        return toCSV(values, delimiter, enclosure, DEFAULT.escape);
     }
 
     private static boolean shouldEnclose(String value, CSV settings) {
