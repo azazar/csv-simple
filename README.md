@@ -7,22 +7,22 @@ csv-simple is a simple CSV reader/writer for Java without any dependencies.
 ### Add maven repository
 
 ```xml
-	<repositories>
-	    <repository>
-	        <id>jitpack.io</id>
-	        <url>https://jitpack.io</url>
-	    </repository>
-	</repositories>
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
 ```
     
 ### And dependency
 
 ```xml
-	<dependency>
-	    <groupId>com.github.azazar</groupId>
-	    <artifactId>csv-simple</artifactId>
-	    <version>1.1.2</version>
-	</dependency>
+<dependency>
+    <groupId>com.github.azazar</groupId>
+    <artifactId>csv-simple</artifactId>
+    <version>1.1.2</version>
+</dependency>
 ```
 
 ## Usage Examples
