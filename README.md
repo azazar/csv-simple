@@ -6,23 +6,28 @@ csv-simple is a simple CSV reader/writer for Java without any dependencies.
 
 ### Add maven repository
 
+```xml
 	<repositories>
 	    <repository>
 	        <id>jitpack.io</id>
 	        <url>https://jitpack.io</url>
 	    </repository>
 	</repositories>
+```
     
 ### And dependency
 
+```xml
 	<dependency>
 	    <groupId>com.github.azazar</groupId>
 	    <artifactId>csv-simple</artifactId>
 	    <version>1.1.2</version>
 	</dependency>
+```
 
 ## Usage Examples
 
+```java
     public static void readExample1() throws IOException {
         // the file with header "field1,field2"
         try (CSVReader r = CSV.RFC4180.createReader(new FileReader("numbers.csv"))) {
@@ -57,3 +62,4 @@ csv-simple is a simple CSV reader/writer for Java without any dependencies.
         }
         out.flush();
     }
+```
