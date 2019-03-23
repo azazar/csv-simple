@@ -45,6 +45,19 @@ public class CSVReaderTest {
     }
 
     @Test
+    public void enclosureTest2() throws IOException {
+        String test = "asd\"zz\"asd\n";
+
+        try (CSVReader r = new CSVReader(new StringReader(test))) {
+            String[] line;
+
+            line = r.readLine();
+
+            assertEquals("asd\"zz\"asd", line[0]);
+        }
+    }
+
+    @Test
     public void fullTest() throws IOException {
         String[][] test = new String[100][3];
 

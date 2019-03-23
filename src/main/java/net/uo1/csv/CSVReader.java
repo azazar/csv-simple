@@ -163,7 +163,7 @@ public class CSVReader implements Closeable, Iterable<Map<String, String>> {
                 }
             }
             else {
-                if (ch == enclosure) {
+                if (ch == enclosure && cell.length() == 0) {
                     enclosed = true;
                 }
                 else if (ch == delimiter || ch == newLine) {
